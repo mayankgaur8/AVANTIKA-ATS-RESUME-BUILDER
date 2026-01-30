@@ -1,0 +1,25 @@
+@page { size: A4; margin: 0; }
+
+@media print {
+  /* Prevent browser-added margins so the document content fills the printable area
+     (browser still may add header/footer text; users must disable "Headers and footers" in the print dialog) */
+  @page { margin: 0; }
+
+  html, body { margin: 0; padding: 0; background: #fff !important; -webkit-print-color-adjust: exact; }
+  .topbar, .noPrint { display: none !important; }
+  .printRoot { padding: 0 !important; margin: 0 !important; }
+
+  /* Make the resume content define its own printable margins (12mm typical) */
+  .printPage {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 auto !important;
+    padding: 12mm !important;
+    box-sizing: border-box !important;
+    width: 210mm !important; /* A4 width; will scale for other sizes */
+    max-width: 100% !important;
+  }
+
+  /* Hide any elements explicitly marked as non-printable */
+  .noPrint, .topbar { display: none !important; }
+}
