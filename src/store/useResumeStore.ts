@@ -6,6 +6,8 @@ type State = {
   templateId: TemplateId;
   resume: ResumeData;
   jobDescription: string;
+  lang: import('../i18n').Lang;
+  setLanguage: (l: import('../i18n').Lang) => void;
 
   setTemplateId: (id: TemplateId) => void;
   setJobDescription: (s: string) => void;
@@ -69,18 +71,19 @@ const defaultData: ResumeData = {
   ]
 };
 
-function loadInitial(): { templateId: TemplateId; resume: ResumeData; jobDescription: string } {
+function loadInitial(): { templateId: TemplateId; resume: ResumeData; jobDescription: string; lang: import('../i18n').Lang } {
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return { templateId: "classic", resume: defaultData, jobDescription: "" };
+    if (!raw) return { templateId: "classic", resume: defaultData, jobDescription: "", lang: 'en' };
     const parsed = JSON.parse(raw);
     return {
       templateId: parsed.templateId ?? "classic",
       resume: parsed.resume ?? defaultData,
-      jobDescription: parsed.jobDescription ?? ""
+      jobDescription: parsed.jobDescription ?? "",
+      lang: parsed.lang ?? 'en'
     };
   } catch {
-    return { templateId: "classic", resume: defaultData, jobDescription: "" };
+    return { templateId: "classic", resume: defaultData, jobDescription: "", lang: 'en' };
   }
 }
 
@@ -91,7 +94,7 @@ export const useResumeStore = create<State>((set, get) => {
     const s = get();
     localStorage.setItem(
       LS_KEY,
-      JSON.stringify({ templateId: s.templateId, resume: s.resume, jobDescription: s.jobDescription })
+      JSON.stringify({ templateId: s.templateId, resume: s.resume, jobDescription: s.jobDescription, lang: s.lang })
     );
   };
 
@@ -99,9 +102,15 @@ export const useResumeStore = create<State>((set, get) => {
     templateId: init.templateId,
     resume: init.resume,
     jobDescription: init.jobDescription,
+    lang: init.lang,
 
     setTemplateId: (id) => {
       set({ templateId: id });
+      persist();
+    },
+
+    setLanguage: (l) => {
+      set({ lang: l });
       persist();
     },
 

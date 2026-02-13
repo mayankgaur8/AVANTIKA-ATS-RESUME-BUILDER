@@ -1,4 +1,6 @@
 import type { ResumeData } from "../types";
+import { t } from "../i18n";
+import { useResumeStore } from "../store/useResumeStore";
 
 export default function ModernTemplate({ data }: { data: ResumeData }) {
   const c = data.contact;
@@ -23,11 +25,11 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 260px", gap: 0 }}>
         <div style={{ padding: 18 }}>
-          <Section title="Summary">
+          <Section title={t(useResumeStore.getState().lang, 'professional_summary') || 'Summary'}>
             <p style={pStyle}>{data.summary}</p>
           </Section>
 
-          <Section title="Experience">
+          <Section title={t(useResumeStore.getState().lang, 'experience') || 'Experience'}>
             {data.experience.map((e) => (
               <div key={e.id} style={{ marginBottom: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
@@ -44,7 +46,7 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
             ))}
           </Section>
 
-          <Section title="Education">
+          <Section title={t(useResumeStore.getState().lang, 'education') || 'Education'}>
             {data.education.map((ed) => (
               <div key={ed.id} style={{ marginBottom: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
@@ -59,13 +61,13 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
         </div>
 
         <aside style={{ padding: 18, borderLeft: "1px solid rgba(0,0,0,0.10)", background: "rgba(15, 23, 42, 0.02)" }}>
-          <div style={{ fontWeight: 950, fontSize: 13, letterSpacing: 0.6, textTransform: "uppercase" }}>Skills</div>
+          <div style={{ fontWeight: 950, fontSize: 13, letterSpacing: 0.6, textTransform: "uppercase" }}>{t(useResumeStore.getState().lang, 'skills_label') || 'Skills'}</div>
           <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 8 }}>
             {data.skills.map((s, i) => <span key={i} style={skillPill}>{s}</span>)}
           </div>
 
           <div style={{ height: 12 }} />
-          <div style={{ fontWeight: 950, fontSize: 13, letterSpacing: 0.6, textTransform: "uppercase" }}>ATS Hints</div>
+          <div style={{ fontWeight: 950, fontSize: 13, letterSpacing: 0.6, textTransform: "uppercase" }}>{t(useResumeStore.getState().lang, 'ats_hints') || 'ATS Hints'}</div>
           <ul style={{ margin: "10px 0 0", paddingLeft: 18 }}>
             <li style={{ ...pStyle }}>Use standard headings</li>
             <li style={{ ...pStyle }}>Avoid tables and images</li>

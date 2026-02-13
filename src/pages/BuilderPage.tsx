@@ -1,6 +1,7 @@
 import { templates } from "../templates";
 import { useResumeStore } from "../store/useResumeStore";
 import { atsScore, missingKeywords, generateResumeFromJD, generateSuggestionsFromJD, Suggestion, dedupeResume } from "../lib/ats";
+import { t, availableLangs } from "../i18n";
 import { useState, useEffect, useRef } from "react";
 
 export default function BuilderPage() {
@@ -60,9 +61,14 @@ export default function BuilderPage() {
             </div>
           </div>
 
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            {/* Styled language picker */}
+            <LangPicker />
+          </div>
+
           <div className="actions">
-            <button className="btn" onClick={reset} title="Reset all data">Reset</button>
-            <button className="btn btnPrimary" onClick={onExportPdf}>Export PDF</button>
+            <button className="btn" onClick={reset} title="Reset all data">{t(useResumeStore.getState().lang, 'reset')}</button>
+            <button className="btn btnPrimary" onClick={onExportPdf}>{t(useResumeStore.getState().lang, 'export_pdf')}</button>
           </div>
         </div>
       </div>
@@ -72,8 +78,8 @@ export default function BuilderPage() {
           <div className="panel noPrint">
             <div className="panelHeader">
               <div>
-                <div className="h1">Build your Resume</div>
-                <div className="muted">Choose template, edit sections, export as ATS-safe PDF.</div>
+                <div className="h1">{t(useResumeStore.getState().lang, 'build_title')}</div>
+                <div className="muted">{t(useResumeStore.getState().lang, 'build_subtitle')}</div>
               </div>
 
               <div className="row" style={{ minWidth: 200 }}>
@@ -81,7 +87,7 @@ export default function BuilderPage() {
                   className="select"
                   value={templateId}
                   onChange={(e) => setTemplateId(e.target.value as any)}
-                  aria-label="Template"
+                  aria-label={t(useResumeStore.getState().lang, 'template_label')}
                 >
                   {Object.entries(templates).map(([id, t]) => (
                     <option key={id} value={id}>
@@ -107,9 +113,9 @@ export default function BuilderPage() {
                     const newResume = generateResumeFromJD(s.jobDescription || '', s.resume);
                     s.setResume(newResume);
                   }}
-                >Generate Resume From JD</button>
+                >{t(useResumeStore.getState().lang, 'generate_from_jd')}</button>
 
-                <button className="btn btnPrimary" onClick={() => window.print()}>Download PDF</button>
+                <button className="btn btnPrimary" onClick={() => window.print()}>{t(useResumeStore.getState().lang, 'download_pdf')}</button>
               </div>
 
               <div className="label">ATS Fix Suggestions</div>
@@ -380,6 +386,45 @@ function Field({ label, value, onChange }: { label: string; value: string; onCha
     <div style={{ flex: 1, minWidth: 160 }}>
       <div className="label">{label}</div>
       <input className="input" value={value} onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+function LangPicker() {
+  const [open, setOpen] = useState(false);
+  const lang = useResumeStore((s) => s.lang);
+  const setLanguage = useResumeStore((s) => s.setLanguage);
+
+  return (
+    <div className="langPicker" style={{ position: 'relative' }}>
+      <button
+        className="langPickerButton"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        type="button"
+      >
+        <span className="globe" aria-hidden>🌐</span>
+        <span className="langLabel">{availableLangs.find(l => l.code === lang)?.label}</span>
+        <span className="caret" aria-hidden>▾</span>
+      </button>
+
+      {open && (
+        <div className="langMenu" role="listbox">
+          {availableLangs.map(l => (
+            <div
+              key={l.code}
+              role="option"
+              className="langItem"
+              onClick={() => { setLanguage(l.code); setOpen(false); }}
+              onKeyDown={(e) => { if (e.key === 'Enter') { setLanguage(l.code); setOpen(false); } }}
+              tabIndex={0}
+            >
+              {l.label}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

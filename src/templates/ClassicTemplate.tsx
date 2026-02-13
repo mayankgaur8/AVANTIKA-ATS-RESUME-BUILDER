@@ -1,4 +1,6 @@
 import type { ResumeData } from "../types";
+import { t } from "../i18n";
+import { useResumeStore } from "../store/useResumeStore";
 
 export default function ClassicTemplate({ data }: { data: ResumeData }) {
   const c = data.contact;
@@ -19,11 +21,11 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
       </div>
 
       <Hr />
-      <Section title="Summary">
+      <Section title={t(useResumeStore.getState().lang, 'professional_summary') || 'Summary'}>
         <p style={pStyle}>{data.summary}</p>
       </Section>
 
-      <Section title="Skills">
+      <Section title={t(useResumeStore.getState().lang, 'skills_label') || 'Skills'}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           {data.skills.map((s, i) => (
             <span key={i} style={skillPill}>{s}</span>
@@ -31,7 +33,7 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
         </div>
       </Section>
 
-      <Section title="Experience">
+      <Section title={t(useResumeStore.getState().lang, 'experience') || 'Experience'}>
         {data.experience.map((e) => (
           <div key={e.id} style={{ marginBottom: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
@@ -48,7 +50,7 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
         ))}
       </Section>
 
-      <Section title="Education">
+      <Section title={t(useResumeStore.getState().lang, 'education') || 'Education'}>
         {data.education.map((ed) => (
           <div key={ed.id} style={{ marginBottom: 10 }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: 'center' }}>

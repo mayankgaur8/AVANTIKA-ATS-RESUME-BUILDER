@@ -177,6 +177,47 @@ a{ color:inherit; text-decoration:none; }
   font-weight: 800;
 }
 
+.langPicker .langPickerButton{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--card);
+  cursor:pointer;
+  font-weight:800;
+}
+.langPicker .globe{
+  font-size:14px;
+}
+.langPicker .langLabel{
+  font-size:13px;
+}
+.langPicker .caret{
+  font-size:12px;
+  opacity:0.8;
+}
+.langPicker .langMenu{
+  position:absolute;
+  right:0;
+  top:42px;
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  padding:6px;
+  border-radius:10px;
+  min-width:140px;
+}
+.langPicker .langItem{
+  padding:8px 10px;
+  border-radius:8px;
+  cursor:pointer;
+}
+.langPicker .langItem:hover{
+  background:rgba(0,0,0,0.04);
+}
+
 @media (max-width: 980px){
   .grid{ grid-template-columns: 1fr; }
 }
